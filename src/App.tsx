@@ -1,4 +1,3 @@
-import React from 'react';
 import Lab1 from './labs/Lab1';
 
 
