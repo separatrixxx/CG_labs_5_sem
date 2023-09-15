@@ -1,2 +1,1 @@
-# CG_labs_5_sem
-👓 Laboratory work for 5 semester of MAI on computer graphics
+# Лабы за 4 семестр ПМИ МАИ по Копьютерной графике
