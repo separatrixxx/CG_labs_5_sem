@@ -56,3 +56,13 @@ h2 {
   width: 100px;
 }
 
+a {
+  font-size: 20px;
+  color: dodgerblue;
+  transition-duration: 300ms;
+}
+
+a:hover {
+  font-size: 20px;
+  color: deepskyblue
+}

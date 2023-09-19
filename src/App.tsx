@@ -1,14 +1,15 @@
-import Lab1 from './labs/Lab1';
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Main from './pages/Main';
+import Lab1 from './pages/Lab1';
 
 
 export default function App() {
   return (
-    <>
-      <div className='header'>
-        <h1>Лабораторные работы по компьютерной графике</h1>
-        <h2>Выполнил Лохматов Никита</h2>
-      </div>
-      <Lab1 />
-    </>
+    <Router>
+      <Routes>
+        <Route path='/' element={<Main />} />
+        <Route path='/lab1' element={<Lab1 />} />
+      </Routes>
+    </Router>
   );
 }
