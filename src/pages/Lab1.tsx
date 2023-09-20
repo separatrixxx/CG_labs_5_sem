@@ -44,7 +44,8 @@ function draw(a: number): any {
 		let step = canvas.width / 20;
 
 		//координатная сетка
-		for (let i = step; i < canvas.width; i += step) {//вертикальные
+		//Вертикальные
+		for (let i = step; i < canvas.width; i += step) {
 			ctx.beginPath();
 			ctx.strokeStyle = 'black';
 			ctx.lineWidth = 0.1;
@@ -54,7 +55,8 @@ function draw(a: number): any {
 			ctx.stroke();
 		}
 
-		for (let i = step; i < canvas.height; i += step) {//Горизонтальные
+		//Горизонтальные
+		for (let i = step; i < canvas.height; i += step) {
 			ctx.beginPath();
 			ctx.moveTo(0, i);
 			ctx.lineTo(canvas.width, i);
@@ -70,12 +72,18 @@ function draw(a: number): any {
 		ctx.lineTo(canvas.width / 2, 0);
 		ctx.moveTo(canvas.width / 2, 0);
 		ctx.lineTo(canvas.width / 2 + 10, 10);
-		ctx.moveTo(canvas.width / 2 - 5, canvas.width / 2 - canvas.width / 20);
-		ctx.lineTo(canvas.width / 2 + 5, canvas.width / 2 - canvas.width / 20);
 		ctx.closePath();
 		ctx.strokeStyle = 'red';
 		ctx.lineWidth = 2;
 		ctx.stroke();
+
+		for (let i = step; i < canvas.height - 20; i += step) {
+			ctx.beginPath();
+			ctx.moveTo(canvas.width / 2 - 5, i);
+			ctx.lineTo(canvas.width / 2 + 5, i);
+			ctx.closePath();
+			ctx.stroke();
+		}
 
 		//ось X
 		ctx.beginPath();
@@ -85,11 +93,17 @@ function draw(a: number): any {
 		ctx.lineTo(canvas.width, canvas.width / 2);
 		ctx.moveTo(canvas.width, canvas.width / 2);
 		ctx.lineTo(canvas.width - 10, canvas.width / 2 + 10);
-		ctx.moveTo(canvas.width / 2 + canvas.width / 20, canvas.width / 2 - 5);
-		ctx.lineTo(canvas.width / 2 + canvas.width / 20, canvas.width / 2 + 5);
 		ctx.closePath();
 		ctx.strokeStyle = 'green';
 		ctx.stroke();
+
+		for (let i = step; i < canvas.height - 20; i += step) {
+			ctx.beginPath();
+			ctx.moveTo(i, canvas.width / 2 - 5);
+			ctx.lineTo(i, canvas.width / 2 + 5);
+			ctx.closePath();
+			ctx.stroke();
+		}
 
 		//начало координат
 		ctx.beginPath();
