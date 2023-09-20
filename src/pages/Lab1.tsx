@@ -43,7 +43,7 @@ function draw(a: number): any {
 
 		let step = canvas.width / 20;
 
-		//координатная сетка
+		//Координатная сетка
 		//Вертикальные
 		for (let i = step; i < canvas.width; i += step) {
 			ctx.beginPath();
@@ -64,7 +64,7 @@ function draw(a: number): any {
 			ctx.stroke();
 		}
 
-		//ось Y
+		//Ось Y
 		ctx.beginPath();
 		ctx.moveTo(canvas.width / 2, 0);
 		ctx.lineTo(canvas.width / 2, canvas.width);
@@ -85,7 +85,7 @@ function draw(a: number): any {
 			ctx.stroke();
 		}
 
-		//ось X
+		//Ось X
 		ctx.beginPath();
 		ctx.moveTo(0, canvas.width / 2);
 		ctx.lineTo(canvas.width, canvas.width / 2);
@@ -105,7 +105,7 @@ function draw(a: number): any {
 			ctx.stroke();
 		}
 
-		//начало координат
+		//Начало координат
 		ctx.beginPath();
 		ctx.arc(canvas.width / 2, canvas.width / 2, 3, 0, Math.PI * 2);
 		ctx.closePath();
