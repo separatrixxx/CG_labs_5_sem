@@ -51,9 +51,30 @@ h2 {
   margin: 30px 20px;
 }
 
-.input,
+.btn,
+.input {
+  padding: 5px;
+  border-width: 0;
+  border-radius: 5px;
+}
+
+.input {
+  width: 86px;
+  box-shadow: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+  border-width: 1px;
+  outline: none;
+}
+
 .btn {
   width: 100px;
+  cursor: pointer;
+  background: dodgerblue;
+  color:white;
+  transition-duration: 300ms;
+}
+
+.btn:hover {
+  background: deepskyblue
 }
 
 a {
@@ -63,6 +84,5 @@ a {
 }
 
 a:hover {
-  font-size: 20px;
   color: deepskyblue
 }
