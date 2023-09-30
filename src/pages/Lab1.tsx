@@ -14,7 +14,6 @@ export default function Lab1() {
 		setDraw();
 	});
 
-
 	return (
 		<div className='lab1'>
 			<input id='input' className='input' placeholder='Введите a' />
@@ -34,6 +33,9 @@ function setDraw() {
 	}
 }
 
+let t = 1;
+let flag = false;
+
 function draw(a: number): any {
 	const canvas: any = document.getElementById("lab1Canvas");
 
@@ -41,7 +43,17 @@ function draw(a: number): any {
 		ctx = canvas.getContext("2d");
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-		let step = canvas.width / 20;
+		if (a / 10 >= t) {
+			t += 1;
+			flag = true;
+		} else if (a / 10 < t && flag) {
+			t -= 1;
+			flag = false;
+		} else {
+			t = 1;
+		}
+
+		let step = canvas.width / (20 * t);
 
 		//Координатная сетка
 		//Вертикальные
@@ -64,6 +76,8 @@ function draw(a: number): any {
 			ctx.stroke();
 		}
 
+		ctx.font = `bold sans-serif`;
+
 		//Ось Y
 		ctx.beginPath();
 		ctx.moveTo(canvas.width / 2, 0);
@@ -77,12 +91,21 @@ function draw(a: number): any {
 		ctx.lineWidth = 2;
 		ctx.stroke();
 
+		let numY = -Math.floor((canvas.height - 20) / step / 2);
+
 		for (let i = step; i < canvas.height - 20; i += step) {
 			ctx.beginPath();
 			ctx.moveTo(canvas.width / 2 - 5, i);
 			ctx.lineTo(canvas.width / 2 + 5, i);
 			ctx.closePath();
 			ctx.stroke();
+			ctx.fillStyle = "green";
+
+			if (numY !== 0) {
+				ctx.fillText(numY, i - 5, canvas.height / 2 - 10);
+			}
+
+			numY += 1;
 		}
 
 		//Ось X
@@ -97,13 +120,25 @@ function draw(a: number): any {
 		ctx.strokeStyle = 'green';
 		ctx.stroke();
 
+		let numX = Math.floor((canvas.height - 20) / step / 2);
+
 		for (let i = step; i < canvas.height - 20; i += step) {
 			ctx.beginPath();
 			ctx.moveTo(i, canvas.width / 2 - 5);
 			ctx.lineTo(i, canvas.width / 2 + 5);
 			ctx.closePath();
 			ctx.stroke();
+			ctx.fillStyle = "red";
+
+			if (numX !== 0) {
+				ctx.fillText(numX, canvas.height / 2 + 10, i);
+			}
+
+			numX -= 1;
 		}
+
+		ctx.fillStyle = "black";
+		ctx.fillText(0, canvas.width / 2 + 5, canvas.height / 2 - 5);
 
 		//Начало координат
 		ctx.beginPath();
