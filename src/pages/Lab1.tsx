@@ -33,9 +33,6 @@ function setDraw() {
 	}
 }
 
-let t = 1;
-let flag = false;
-
 function draw(a: number): any {
 	const canvas: any = document.getElementById("lab1Canvas");
 
@@ -43,17 +40,7 @@ function draw(a: number): any {
 		ctx = canvas.getContext("2d");
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-		if (a / 10 >= t) {
-			t += 1;
-			flag = true;
-		} else if (a / 10 < t && flag) {
-			t -= 1;
-			flag = false;
-		} else {
-			t = 1;
-		}
-
-		let step = canvas.width / (20 * t);
+		let step = canvas.width / (20 * Math.ceil(a / 10));
 
 		//Координатная сетка
 		//Вертикальные
