@@ -7,6 +7,7 @@ export default function Main() {
 			<h1>Лабораторные работы по компьютерной графике</h1>
 			<h2>Выполнил Лохматов Никита</h2>
 			<LabBlock h1='Lab 1' h2='variant: x^(2/3) + y^(2/3) = a^(2/3)' link='lab1' />
+			<LabBlock h1='Lab 2' h2='variant: обелиск' link='lab2' />
 		</div>
 	);
 }

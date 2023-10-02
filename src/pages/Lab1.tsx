@@ -127,6 +127,12 @@ function draw(a: number): any {
 		ctx.fillStyle = "black";
 		ctx.fillText(0, canvas.width / 2 + 5, canvas.height / 2 - 5);
 
+		ctx.fillStyle = "green";
+		ctx.fillText('X', canvas.width - 10, canvas.height / 2 - 20);
+
+		ctx.fillStyle = "red";
+		ctx.fillText('Y', canvas.width / 2 + 20, 10);
+
 		//Начало координат
 		ctx.beginPath();
 		ctx.arc(canvas.width / 2, canvas.width / 2, 3, 0, Math.PI * 2);
