@@ -68,51 +68,44 @@ function draw(a: number, b: number, c: number, d: number, h: number, rotate1: nu
 		const startWidthNG = (canvas.width - a - Math.sqrt(b ** 2 - step1 ** 2)) / 2;
 		const startHeightNG = (canvas.height + h + step2) / 2;
 
-		const v1 = [startWidthNG, startHeightNG];
-		const v2 = [startWidthNG + a, startHeightNG];
-		const v3 = [startWidthNG + a, startHeightNG];
-		const v4 = [startWidthNG, startHeightNG];
-
-		let newV1 = [v1[0] * Math.cos(rotate2) + v1[1] * Math.sin(rotate2), -v1[0] * Math.sin(rotate2) + v1[1] * Math.cos(rotate2)];
-		let newV2 = [v2[0] * Math.cos(rotate2) + v2[1] * Math.sin(rotate2), -v2[0] * Math.sin(rotate2) + v2[1] * Math.cos(rotate2)];
-		let newV3 = [v3[0] * Math.cos(rotate2) + v3[1] * Math.sin(rotate2), -v3[0] * Math.sin(rotate2) + v3[1] * Math.cos(rotate2)];
-		let newV4 = [v4[0] * Math.cos(rotate2) + v4[1] * Math.sin(rotate2), -v4[0] * Math.sin(rotate2) + v4[1] * Math.cos(rotate2)];
+		const startWidthVG = startWidthNG + (a - c) / 2;
+		const startHeightVG = startHeightNG - h;
 
 
 		ctx.beginPath();
 		//Нижняя грань
-		ctx.moveTo(newV1[0], newV1[1]);
-		ctx.lineTo(newV2[0], newV2[1]);
-		// ctx.lineTo(newV3[0], newV3[1]);
-		// ctx.lineTo(newV4[0], newV4[1]);
+		ctx.moveTo(startWidthNG, startHeightNG);
+		ctx.lineTo(startWidthNG + a, startHeightNG);
+		ctx.lineTo(startWidthNG + a + Math.sqrt(b ** 2 - step1 ** 2), startHeightNG - step1);
+		ctx.lineTo(startWidthNG + Math.sqrt(b ** 2 - step1 ** 2), startHeightNG - step1);
 		ctx.closePath();
 
-		// //Верхняя грань
-		// ctx.moveTo((canvas.width - a) / 2 + (a - c) / 2, canvas.height / 2 - b - h);
-		// ctx.lineTo((canvas.width - a) / 2 + (a + c) / 2, canvas.height / 2 - b - h);
-		// ctx.lineTo((canvas.width - a) / 2 + (a + c) / 2 + Math.sqrt(d ** 2 - step2 ** 2), canvas.height / 2 - b - h - step2);
-		// ctx.lineTo((canvas.width - a) / 2 + (a - c) / 2 + Math.sqrt(d ** 2 - step2 ** 2), canvas.height / 2 - b - h - step2);
-		// ctx.closePath();
+		//Верхняя грань
+		ctx.moveTo(startWidthVG, startHeightVG);
+		ctx.lineTo(startWidthVG + c, startHeightVG);
+		ctx.lineTo(startWidthVG + c + Math.sqrt(d ** 2 - step2 ** 2), startHeightVG - step2);
+		ctx.lineTo(startWidthVG + Math.sqrt(d ** 2 - step2 ** 2), startHeightVG - step2);
+		ctx.closePath();
 
-		// //Ребро 1
-		// ctx.moveTo((canvas.width - a) / 2, canvas.height / 2 - b);
-		// ctx.lineTo((canvas.width - a) / 2 + (a - c) / 2, canvas.height / 2 - b - h);
-		// ctx.closePath();
+		//Ребро 1
+		ctx.moveTo(startWidthNG, startHeightNG);
+		ctx.lineTo(startWidthVG, startHeightVG);
+		ctx.closePath();
 
-		// //Ребро 2
-		// ctx.moveTo((canvas.width + a) / 2, canvas.height / 2 - b);
-		// ctx.lineTo((canvas.width - a) / 2 + (a + c) / 2, canvas.height / 2 - b - h);
-		// ctx.closePath();
+		//Ребро 2
+		ctx.moveTo(startWidthNG + a, startHeightNG);
+		ctx.lineTo(startWidthVG + c, startHeightVG);
+		ctx.closePath();
 
-		// //Ребро 3
-		// ctx.moveTo((canvas.width + a) / 2 + Math.sqrt(b ** 2 - step1 ** 2), canvas.height / 2 - b - step1);
-		// ctx.lineTo((canvas.width - a) / 2 + (a + c) / 2 + Math.sqrt(d ** 2 - step2 ** 2), canvas.height / 2 - b - h - step2);
-		// ctx.closePath();
+		//Ребро 3
+		ctx.moveTo(startWidthNG + a + Math.sqrt(b ** 2 - step1 ** 2), startHeightNG - step1);
+		ctx.lineTo(startWidthVG + c + Math.sqrt(d ** 2 - step2 ** 2), startHeightVG - step2);
+		ctx.closePath();
 
-		// //Ребро 4
-		// ctx.moveTo((canvas.width - a) / 2 + Math.sqrt(b ** 2 - step1 ** 2), canvas.height / 2 - b - step1);
-		// ctx.lineTo((canvas.width - a) / 2 + (a - c) / 2 + Math.sqrt(d ** 2 - step2 ** 2), canvas.height / 2 - b - h - step2);
-		// ctx.closePath();
+		//Ребро 4
+		ctx.moveTo(startWidthNG + Math.sqrt(b ** 2 - step1 ** 2), startHeightNG - step1);
+		ctx.lineTo(startWidthVG + Math.sqrt(d ** 2 - step2 ** 2), startHeightVG - step2);
+		ctx.closePath();
 
 
 		ctx.strokeStyle = 'red';
