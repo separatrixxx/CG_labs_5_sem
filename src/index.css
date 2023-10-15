@@ -17,7 +17,8 @@ body {
 }
 
 h1,
-h2 {
+h2,
+h3 {
   margin: 0;
 }
 
@@ -85,4 +86,15 @@ a {
 
 a:hover {
   color: deepskyblue
+}
+
+.inputsDiv {
+  width: fit-content;
+  display: grid;
+  grid-template-columns: repeat(5, auto);
+  gap: 20px;
+}
+
+#lab2Canvas {
+  background: rgb(204, 248, 255);
 }
