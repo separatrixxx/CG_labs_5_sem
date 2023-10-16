@@ -52,6 +52,17 @@ h2 {
   margin: 30px 20px;
 }
 
+.lab2 {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 20px;
+}
+
+.optionsLab2 {
+  display: grid;
+  gap: 20px;
+}
+
 .btn,
 .input {
   padding: 5px;
@@ -91,7 +102,7 @@ a:hover {
 .inputsDiv {
   width: fit-content;
   display: grid;
-  grid-template-columns: repeat(5, auto);
+  grid-template-columns: repeat(3, auto);
   gap: 20px;
 }
 
