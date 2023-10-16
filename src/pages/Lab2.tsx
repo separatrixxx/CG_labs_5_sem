@@ -42,19 +42,19 @@ export default function Lab2() {
 						setDraw(scale, rotate1, rotate2, rotate3);
 					}} />
 				<h3>Поворот X</h3>
-				<input id='range2' type="range" min="0" max="6.28319" step="0.0174533" value={rotate1}
+				<input id='range2' type="range" min="0" max="10" step="0.001" value={rotate1}
 					onChange={(e) => {
 						setRotate1(+e.target.value);
 						setDraw(scale, rotate1, rotate2, rotate3);
 					}} />
 				<h3>Поворот Y</h3>
-				<input id='range3' type="range" min="0" max="6.28319" step="0.0174533" value={rotate2}
+				<input id='range3' type="range" min="0" max="10" step="0.001" value={rotate2}
 					onChange={(e) => {
 						setRotate2(+e.target.value);
 						setDraw(scale, rotate1, rotate2, rotate3);
 					}} />
 				<h3>Поворот Z</h3>
-				<input id='range4' type="range" min="0" max="6.28319" step="0.0174533" value={rotate3}
+				<input id='range4' type="range" min="0" max="10" step="0.001" value={rotate3}
 					onChange={(e) => {
 						setRotate3(+e.target.value);
 						setDraw(scale, rotate1, rotate2, rotate3);
@@ -146,6 +146,24 @@ function rotateZ(rotate3: number, vertices: Vertex[]): Vertex[] {
 	return newVertices;
 };
 
+function rightThree(v1: Vertex, v2: Vertex, v3: Vertex): boolean {
+	const vect1: Vertex = {
+		x: v1.x - v2.x,
+		y: v1.y - v2.x,
+		z: v1.z - v2.z,
+	};
+
+	const vect2: Vertex = {
+		x: v3.x - v2.x,
+		y: v3.y - v2.x,
+		z: v3.z - v2.z,
+	};
+
+	const z = vect1.x * vect2.y - vect1.y * vect2.x;
+
+	return z > 0;
+}
+
 function draw(a: number, b: number, c: number, d: number, h: number, rotate1: number, rotate2: number, rotate3: number): any {
 	const canvas: any = document.getElementById("lab2Canvas");
 
@@ -153,61 +171,52 @@ function draw(a: number, b: number, c: number, d: number, h: number, rotate1: nu
 		ctx = canvas.getContext("2d");
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-		const step1 = 50;
-		const step2 = c * step1 / a;
-
-		const startWidthNG = (canvas.width - a - Math.sqrt(b ** 2 - step1 ** 2)) / 2;
-		const startHeightNG = (canvas.height + h + step2) / 2;
-
-		const startWidthVG = startWidthNG + (a - c) / 2;
-		const startHeightVG = startHeightNG - h;
-
 		let v1: Vertex = {
-			x: startWidthNG,
-			y: startHeightNG,
-			z: 0,
+			x: -c,
+			y: -h,
+			z: d,
 		};
 
 		let v2: Vertex = {
-			x: startWidthNG + a,
-			y: startHeightNG,
-			z: 0,
+			x: c,
+			y: -h,
+			z: d,
 		};
 
 		let v3: Vertex = {
-			x: startWidthNG + a + Math.sqrt(b ** 2 - step1 ** 2),
-			y: startHeightNG - step1,
-			z: 0,
+			x: a,
+			y: h,
+			z: b,
 		};
 
 		let v4: Vertex = {
-			x: startWidthNG + Math.sqrt(b ** 2 - step1 ** 2),
-			y: startHeightNG - step1,
-			z: 0,
+			x: -a,
+			y: h,
+			z: b,
 		};
 
 		let v5: Vertex = {
-			x: startWidthVG,
-			y: startHeightVG,
-			z: 0,
+			x: -c,
+			y: -h,
+			z: -d,
 		};
 
 		let v6: Vertex = {
-			x: startWidthVG + c,
-			y: startHeightVG,
-			z: 0,
+			x: c,
+			y: -h,
+			z: -d,
 		};
 
 		let v7: Vertex = {
-			x: startWidthVG + c + Math.sqrt(d ** 2 - step2 ** 2),
-			y: startHeightVG - step2,
-			z: 0,
+			x: a,
+			y: h,
+			z: -b,
 		};
 
 		let v8: Vertex = {
-			x: startWidthVG + Math.sqrt(d ** 2 - step2 ** 2),
-			y: startHeightVG - step2,
-			z: 0,
+			x: -a,
+			y: h,
+			z: -b,
 		};
 
 		let vertices: Vertex[] = [v1, v2, v3, v4, v5, v6, v7, v8];
@@ -216,65 +225,97 @@ function draw(a: number, b: number, c: number, d: number, h: number, rotate1: nu
 		vertices = rotateY(rotate2, vertices);
 		vertices = rotateZ(rotate3, vertices);
 
-		//Нижняя грань
-		ctx.beginPath();
-		ctx.moveTo(vertices[0].x, vertices[0].y);
-		ctx.lineTo(vertices[1].x, vertices[1].y);
-		ctx.lineTo(vertices[2].x, vertices[2].y);
-		ctx.lineTo(vertices[3].x, vertices[3].y);
-		ctx.fill();
-		ctx.closePath();
-		ctx.fillStyle = 'red';
-		ctx.fill();
-
-		//Грань 3
-		ctx.beginPath();
-		ctx.moveTo(vertices[2].x, vertices[2].y);
-		ctx.lineTo(vertices[3].x, vertices[3].y);
-		ctx.lineTo(vertices[7].x, vertices[7].y);
-		ctx.lineTo(vertices[6].x, vertices[6].y);
-		ctx.closePath();
-		ctx.fillStyle = 'orange';
-		ctx.fill();
-
-		//Грань 4
-		ctx.beginPath();
-		ctx.moveTo(vertices[0].x, vertices[0].y);
-		ctx.lineTo(vertices[3].x, vertices[3].y);
-		ctx.lineTo(vertices[7].x, vertices[7].y);
-		ctx.lineTo(vertices[4].x, vertices[4].y);
-		ctx.closePath();
-		ctx.fillStyle = 'deeppink';
-		ctx.fill();
+		const shiftW = canvas.width / 2;
+		const shiftH = canvas.height / 2;
 
 		//Верхняя грань
-		ctx.beginPath();
-		ctx.moveTo(vertices[4].x, vertices[4].y);
-		ctx.lineTo(vertices[5].x, vertices[5].y);
-		ctx.lineTo(vertices[6].x, vertices[6].y);
-		ctx.lineTo(vertices[7].x, vertices[7].y);
-		ctx.closePath();
-		ctx.fillStyle = 'green';
-		ctx.fill();
+		let flag1 = rightThree(vertices[5], vertices[4], vertices[0]);
 
-		//Грань 1
-		ctx.beginPath();
-		ctx.moveTo(vertices[0].x, vertices[0].y);
-		ctx.lineTo(vertices[1].x, vertices[1].y);
-		ctx.lineTo(vertices[5].x, vertices[5].y);
-		ctx.lineTo(vertices[4].x, vertices[4].y);
-		ctx.closePath();
-		ctx.fillStyle = 'blue';
-		ctx.fill();
+		if (flag1) {
+			ctx.beginPath();
+			ctx.moveTo(vertices[0].x + shiftW, vertices[0].y + shiftH);
+			ctx.lineTo(vertices[1].x + shiftW, vertices[1].y + shiftH);
+			ctx.lineTo(vertices[5].x + shiftW, vertices[5].y + shiftH);
+			ctx.lineTo(vertices[4].x + shiftW, vertices[4].y + shiftH);
+			ctx.closePath();
+			ctx.strokeStyle = 'red';
+			ctx.lineWidth = 2;
+			ctx.stroke();
+		}
 
-		//Грань 2
-		ctx.beginPath();
-		ctx.moveTo(vertices[1].x, vertices[1].y);
-		ctx.lineTo(vertices[2].x, vertices[2].y);
-		ctx.lineTo(vertices[6].x, vertices[6].y);
-		ctx.lineTo(vertices[5].x, vertices[5].y);
-		ctx.closePath();
-		ctx.fillStyle = 'purple';
-		ctx.fill();
+		//Нижняя грань
+		let flag2 = rightThree(vertices[7], vertices[6], vertices[2]);
+
+		if (flag2) {
+			ctx.beginPath();
+			ctx.moveTo(vertices[3].x + shiftW, vertices[3].y + shiftH);
+			ctx.lineTo(vertices[2].x + shiftW, vertices[2].y + shiftH);
+			ctx.lineTo(vertices[6].x + shiftW, vertices[6].y + shiftH);
+			ctx.lineTo(vertices[7].x + shiftW, vertices[7].y + shiftH);
+			ctx.closePath();
+			ctx.strokeStyle = 'red';
+			ctx.lineWidth = 2;
+			ctx.stroke();
+		}
+
+		//Задняя грань
+		let flag3 = rightThree(vertices[3], vertices[2], vertices[1]);
+
+		if (flag3) {
+			ctx.beginPath();
+			ctx.moveTo(vertices[0].x + shiftW, vertices[0].y + shiftH);
+			ctx.lineTo(vertices[1].x + shiftW, vertices[1].y + shiftH);
+			ctx.lineTo(vertices[2].x + shiftW, vertices[2].y + shiftH);
+			ctx.lineTo(vertices[3].x + shiftW, vertices[3].y + shiftH);
+			ctx.closePath();
+			ctx.strokeStyle = 'red';
+			ctx.lineWidth = 2;
+			ctx.stroke();
+		}
+
+		//Передняя грань
+		let flag4 = rightThree(vertices[6], vertices[7], vertices[4]);
+
+		if (flag4) {
+			ctx.beginPath();
+			ctx.moveTo(vertices[4].x + shiftW, vertices[4].y + shiftH);
+			ctx.lineTo(vertices[5].x + shiftW, vertices[5].y + shiftH);
+			ctx.lineTo(vertices[6].x + shiftW, vertices[6].y + shiftH);
+			ctx.lineTo(vertices[7].x + shiftW, vertices[7].y + shiftH);
+			ctx.closePath();
+			ctx.strokeStyle = 'red';
+			ctx.lineWidth = 2;
+			ctx.stroke();
+		}
+
+		//Правая грань
+		let flag5 = rightThree(vertices[2], vertices[6], vertices[5]);
+
+		if (flag5) {
+			ctx.beginPath();
+			ctx.moveTo(vertices[1].x + shiftW, vertices[1].y + shiftH);
+			ctx.lineTo(vertices[5].x + shiftW, vertices[5].y + shiftH);
+			ctx.lineTo(vertices[6].x + shiftW, vertices[6].y + shiftH);
+			ctx.lineTo(vertices[2].x + shiftW, vertices[2].y + shiftH);
+			ctx.closePath();
+			ctx.strokeStyle = 'red';
+			ctx.lineWidth = 2;
+			ctx.stroke();
+		}
+
+		//Левая грань
+		let flag6 = rightThree(vertices[7], vertices[3], vertices[0]);
+
+		if (flag6) {
+			ctx.beginPath();
+			ctx.moveTo(vertices[0].x + shiftW, vertices[0].y + shiftH);
+			ctx.lineTo(vertices[4].x + shiftW, vertices[4].y + shiftH);
+			ctx.lineTo(vertices[7].x + shiftW, vertices[7].y + shiftH);
+			ctx.lineTo(vertices[3].x + shiftW, vertices[3].y + shiftH);
+			ctx.closePath();
+			ctx.strokeStyle = 'red';
+			ctx.lineWidth = 2;
+			ctx.stroke();
+		}
 	}
 }
