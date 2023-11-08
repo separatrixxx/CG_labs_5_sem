@@ -90,6 +90,7 @@ h2 {
 }
 
 a {
+  width: fit-content;
   font-size: 20px;
   color: dodgerblue;
   transition-duration: 300ms;
