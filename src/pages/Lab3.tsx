@@ -17,13 +17,15 @@ export default function Lab2() {
 		window.innerHeight - 150 < window.innerWidth
 			? setSize(window.innerHeight - 150)
 			: setSize(window.innerWidth);
-		setDraw(scale, rotate1, rotate2, rotate3);
+		setDraw(scale, rotate1, rotate2, rotate3, isPrisma);
 	});
 
 	const [scale, setScale] = useState<number>(1);
 	const [rotate1, setRotate1] = useState<number>(0);
 	const [rotate2, setRotate2] = useState<number>(0);
 	const [rotate3, setRotate3] = useState<number>(0);
+
+	const [isPrisma, setIsPrisma] = useState<boolean>(false);
 
 	return (
 		<div className='lab2'>
@@ -35,31 +37,35 @@ export default function Lab2() {
 					<input id='input4' className='input' placeholder='Введите d' />
 					<input id='input5' className='input' placeholder='Введите h' />
 				</div>
+				<button className='btn' onClick={() => {
+					setIsPrisma(!isPrisma);
+					setDraw(scale, rotate1, rotate2, rotate3, !isPrisma);
+				}}>Аппроксимация в призму</button>
 				<h3>Масштабирование</h3>
 				<input id='range1' type="range" min="1" max="10" step="0.1" value={scale}
 					onChange={(e) => {
 						setScale(+e.target.value);
-						setDraw(scale, rotate1, rotate2, rotate3);
+						setDraw(scale, rotate1, rotate2, rotate3, isPrisma);
 					}} />
 				<h3>Поворот X</h3>
 				<input id='range2' type="range" min="0" max="10" step="0.001" value={rotate1}
 					onChange={(e) => {
 						setRotate1(+e.target.value);
-						setDraw(scale, rotate1, rotate2, rotate3);
+						setDraw(scale, rotate1, rotate2, rotate3, isPrisma);
 					}} />
 				<h3>Поворот Y</h3>
 				<input id='range3' type="range" min="0" max="10" step="0.001" value={rotate2}
 					onChange={(e) => {
 						setRotate2(+e.target.value);
-						setDraw(scale, rotate1, rotate2, rotate3);
+						setDraw(scale, rotate1, rotate2, rotate3, isPrisma);
 					}} />
 				<h3>Поворот Z</h3>
 				<input id='range4' type="range" min="0" max="10" step="0.001" value={rotate3}
 					onChange={(e) => {
 						setRotate3(+e.target.value);
-						setDraw(scale, rotate1, rotate2, rotate3);
+						setDraw(scale, rotate1, rotate2, rotate3, isPrisma);
 					}} />
-				<button className='btn' onClick={() => setDraw(scale, rotate1, rotate2, rotate3)}>Построить фигуру</button>
+				<button className='btn' onClick={() => setDraw(scale, rotate1, rotate2, rotate3, isPrisma)}>Построить фигуру</button>
 			</div>
 			<canvas id="lab2Canvas" width={size} height={size} />
 		</div>
@@ -68,7 +74,7 @@ export default function Lab2() {
 
 let ctx: any;
 
-function setDraw(scale: number, rotate1: number, rotate2: number, rotate3: number) {
+function setDraw(scale: number, rotate1: number, rotate2: number, rotate3: number, isPrisma: boolean) {
 	let a: number = +(document.getElementById('input1') as HTMLInputElement).value;
 	let b: number = +(document.getElementById('input2') as HTMLInputElement).value;
 	let c: number = +(document.getElementById('input3') as HTMLInputElement).value;
@@ -82,7 +88,7 @@ function setDraw(scale: number, rotate1: number, rotate2: number, rotate3: numbe
 	h *= scale;
 
 	if (a && b && c && d && h) {
-		draw(a, b, c, d, h, rotate1, rotate2, rotate3);
+		draw(a, b, c, d, h, rotate1, rotate2, rotate3, isPrisma);
 	}
 }
 
@@ -164,7 +170,8 @@ function rightThree(v1: Vertex, v2: Vertex, v3: Vertex): number {
 	return z;
 }
 
-function draw(a: number, b: number, c: number, d: number, h: number, rotate1: number, rotate2: number, rotate3: number): any {
+function draw(a: number, b: number, c: number, d: number, h: number, rotate1: number, rotate2: number, rotate3: number,
+	isPrisma: boolean): any {
 	const canvas: any = document.getElementById("lab2Canvas");
 
 	if (canvas?.getContext) {
@@ -184,15 +191,15 @@ function draw(a: number, b: number, c: number, d: number, h: number, rotate1: nu
 		};
 
 		let v3: Vertex = {
-			x: a,
+			x: isPrisma ? c : a,
 			y: h,
-			z: b,
+			z: isPrisma ? d : b,
 		};
 
 		let v4: Vertex = {
-			x: -a,
+			x: isPrisma ? -c : -a,
 			y: h,
-			z: b,
+			z: isPrisma ? d : b,
 		};
 
 		let v5: Vertex = {
@@ -208,15 +215,15 @@ function draw(a: number, b: number, c: number, d: number, h: number, rotate1: nu
 		};
 
 		let v7: Vertex = {
-			x: a,
+			x: isPrisma ? c : a,
 			y: h,
-			z: -b,
+			z: isPrisma ? -d : -b,
 		};
 
 		let v8: Vertex = {
-			x: -a,
+			x: isPrisma ? -c : -a,
 			y: h,
-			z: -b,
+			z: isPrisma ? -d : -b,
 		};
 
 		let vertices: Vertex[] = [v1, v2, v3, v4, v5, v6, v7, v8];
