@@ -17,15 +17,13 @@ export default function Lab2() {
 		window.innerHeight - 150 < window.innerWidth
 			? setSize(window.innerHeight - 150)
 			: setSize(window.innerWidth);
-		setDraw(scale, rotate1, rotate2, rotate3, isPrisma);
+		setDraw(scale, rotate1, rotate2, rotate3);
 	});
 
 	const [scale, setScale] = useState<number>(1);
 	const [rotate1, setRotate1] = useState<number>(0);
 	const [rotate2, setRotate2] = useState<number>(0);
 	const [rotate3, setRotate3] = useState<number>(0);
-
-	const [isPrisma, setIsPrisma] = useState<boolean>(false);
 
 	return (
 		<div className='lab2'>
@@ -38,43 +36,42 @@ export default function Lab2() {
 					<input id='input5' className='input' placeholder='Введите h' />
 				</div>
 				<button className='btn' onClick={() => {
-					setIsPrisma(!isPrisma);
-					setDraw(scale, rotate1, rotate2, rotate3, !isPrisma);
-				}}>Аппроксимация в призму</button>
+					setDrawEllipsoid(scale, rotate1, rotate2, rotate3);
+				}}>Аппроксимация</button>
 				<h3>Масштабирование</h3>
 				<input id='range1' type="range" min="1" max="10" step="0.1" value={scale}
 					onChange={(e) => {
 						setScale(+e.target.value);
-						setDraw(scale, rotate1, rotate2, rotate3, isPrisma);
+						setDraw(scale, rotate1, rotate2, rotate3);
 					}} />
 				<h3>Поворот X</h3>
 				<input id='range2' type="range" min="0" max="10" step="0.001" value={rotate1}
 					onChange={(e) => {
 						setRotate1(+e.target.value);
-						setDraw(scale, rotate1, rotate2, rotate3, isPrisma);
+						setDraw(scale, rotate1, rotate2, rotate3);
 					}} />
 				<h3>Поворот Y</h3>
 				<input id='range3' type="range" min="0" max="10" step="0.001" value={rotate2}
 					onChange={(e) => {
 						setRotate2(+e.target.value);
-						setDraw(scale, rotate1, rotate2, rotate3, isPrisma);
+						setDraw(scale, rotate1, rotate2, rotate3);
 					}} />
 				<h3>Поворот Z</h3>
 				<input id='range4' type="range" min="0" max="10" step="0.001" value={rotate3}
 					onChange={(e) => {
 						setRotate3(+e.target.value);
-						setDraw(scale, rotate1, rotate2, rotate3, isPrisma);
+						setDraw(scale, rotate1, rotate2, rotate3);
 					}} />
-				<button className='btn' onClick={() => setDraw(scale, rotate1, rotate2, rotate3, isPrisma)}>Построить фигуру</button>
+				<button className='btn' onClick={() => setDraw(scale, rotate1, rotate2, rotate3)}>Построить фигуру</button>
 			</div>
-			<canvas id="lab2Canvas" width={size} height={size} />
+			<canvas id="labCanvas" width={size} height={size} />
 		</div>
 	);
 }
 
 let ctx: any;
 
-function setDraw(scale: number, rotate1: number, rotate2: number, rotate3: number, isPrisma: boolean) {
+function setDraw(scale: number, rotate1: number, rotate2: number, rotate3: number) {
 	let a: number = +(document.getElementById('input1') as HTMLInputElement).value;
 	let b: number = +(document.getElementById('input2') as HTMLInputElement).value;
 	let c: number = +(document.getElementById('input3') as HTMLInputElement).value;
@@ -88,7 +85,25 @@ function setDraw(scale: number, rotate1: number, rotate2: number, rotate3: numbe
 	h *= scale;
 
 	if (a && b && c && d && h) {
-		draw(a, b, c, d, h, rotate1, rotate2, rotate3, isPrisma);
+		draw(a, b, c, d, h, rotate1, rotate2, rotate3);
+	}
+}
+
+function setDrawEllipsoid(scale: number, rotate1: number, rotate2: number, rotate3: number) {
+	let a: number = +(document.getElementById('input1') as HTMLInputElement).value;
+	let b: number = +(document.getElementById('input2') as HTMLInputElement).value;
+	let c: number = +(document.getElementById('input3') as HTMLInputElement).value;
+	let d: number = +(document.getElementById('input4') as HTMLInputElement).value;
+	let h: number = +(document.getElementById('input5') as HTMLInputElement).value;
+
+	a *= scale;
+	b *= scale;
+	c *= scale;
+	d *= scale;
+	h *= scale;
+
+	if (a && b && c && d && h) {
+		drawEllipsoid(a, b, c, rotate1, rotate2, rotate3);
 	}
 }
 
@@ -170,9 +185,8 @@ function rightThree(v1: Vertex, v2: Vertex, v3: Vertex): number {
 	return z;
 }
 
-function draw(a: number, b: number, c: number, d: number, h: number, rotate1: number, rotate2: number, rotate3: number,
-	isPrisma: boolean): any {
-	const canvas: any = document.getElementById("lab2Canvas");
+function draw(a: number, b: number, c: number, d: number, h: number, rotate1: number, rotate2: number, rotate3: number): any {
+	const canvas: any = document.getElementById("labCanvas");
 
 	if (canvas?.getContext) {
 		ctx = canvas.getContext("2d");
@@ -191,15 +205,15 @@ function draw(a: number, b: number, c: number, d: number, h: number, rotate1: nu
 		};
 
 		let v3: Vertex = {
-			x: isPrisma ? c : a,
+			x: a,
 			y: h,
-			z: isPrisma ? d : b,
+			z: b,
 		};
 
 		let v4: Vertex = {
-			x: isPrisma ? -c : -a,
+			x: -a,
 			y: h,
-			z: isPrisma ? d : b,
+			z: b,
 		};
 
 		let v5: Vertex = {
@@ -215,15 +229,15 @@ function draw(a: number, b: number, c: number, d: number, h: number, rotate1: nu
 		};
 
 		let v7: Vertex = {
-			x: isPrisma ? c : a,
+			x: a,
 			y: h,
-			z: isPrisma ? -d : -b,
+			z: -b,
 		};
 
 		let v8: Vertex = {
-			x: isPrisma ? -c : -a,
+			x: -a,
 			y: h,
-			z: isPrisma ? -d : -b,
+			z: -b,
 		};
 
 		let vertices: Vertex[] = [v1, v2, v3, v4, v5, v6, v7, v8];
@@ -324,6 +338,69 @@ function draw(a: number, b: number, c: number, d: number, h: number, rotate1: nu
 			ctx.lineWidth = 2;
 			ctx.fill();
 		}
-
 	}
+}
+
+const radiusX = 1; // Радиус по оси X
+const radiusY = 1; // Радиус по оси Y
+const radiusZ = 1; // Радиус по оси Z
+const latitudeBands = 30; // Количество полос по широте
+const longitudeBands = 30; // Количество полос по долготе
+
+function createEllipsoidVertices() {
+	const vertices: number[] = [];
+
+	for (let latNumber = 0; latNumber <= latitudeBands; latNumber++) {
+		const theta = latNumber * Math.PI / latitudeBands;
+		const sinTheta = Math.sin(theta);
+		const cosTheta = Math.cos(theta);
+
+		for (let longNumber = 0; longNumber <= longitudeBands; longNumber++) {
+			const phi = longNumber * 2 * Math.PI / longitudeBands;
+			const sinPhi = Math.sin(phi);
+			const cosPhi = Math.cos(phi);
+
+			const x = cosPhi * sinTheta;
+			const y = cosTheta;
+			const z = sinPhi * sinTheta;
+
+			// Масштабирование по осям
+			vertices.push(radiusX * x);
+			vertices.push(radiusY * y);
+			vertices.push(radiusZ * z);
+		}
+	}
+
+	return vertices;
+}
+
+function createVertexBuffer(gl: WebGLRenderingContext, vertices: number[]) {
+	const vertexBuffer = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+	return vertexBuffer;
+}
+
+function initWebGL() {
+	const canvas: any = document.getElementById("labCanvas");
+
+	if (canvas?.getContext) {
+		ctx = canvas.getContext("2d");
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+		const gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+
+		if (!gl) {
+			console.log(gl);
+		} else {
+			const vertices = createEllipsoidVertices();
+			const vertexBuffer = createVertexBuffer(gl, vertices);
+		}
+	}
+
+	// ... далее код для настройки шейдеров и отрисовки
+}
+
+function drawEllipsoid(a: number, b: number, c: number, rotate1: number, rotate2: number, rotate3: number): any {
+	initWebGL();
 }

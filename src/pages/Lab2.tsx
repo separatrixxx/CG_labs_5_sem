@@ -61,7 +61,7 @@ export default function Lab2() {
 					}} />
 				<button className='btn' onClick={() => setDraw(scale, rotate1, rotate2, rotate3)}>Построить фигуру</button>
 			</div>
-			<canvas id="lab2Canvas" width={size} height={size} />
+			<canvas id="labCanvas" width={size} height={size} />
 		</div>
 	);
 }
@@ -165,7 +165,7 @@ function rightThree(v1: Vertex, v2: Vertex, v3: Vertex): number {
 }
 
 function draw(a: number, b: number, c: number, d: number, h: number, rotate1: number, rotate2: number, rotate3: number): any {
-	const canvas: any = document.getElementById("lab2Canvas");
+	const canvas: any = document.getElementById("labCanvas");
 
 	if (canvas?.getContext) {
 		ctx = canvas.getContext("2d");
@@ -317,6 +317,5 @@ function draw(a: number, b: number, c: number, d: number, h: number, rotate1: nu
 			ctx.lineWidth = 2;
 			ctx.fill();
 		}
-
 	}
 }

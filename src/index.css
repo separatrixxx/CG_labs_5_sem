@@ -78,7 +78,7 @@ h2 {
 }
 
 .btn {
-  width: 100px;
+  width: 120px;
   cursor: pointer;
   background: dodgerblue;
   color:white;
@@ -107,6 +107,6 @@ a:hover {
   gap: 20px;
 }
 
-#lab2Canvas {
+#labCanvas {
   background: rgb(204, 248, 255);
 }
