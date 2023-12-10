@@ -7,7 +7,7 @@ interface Vertex {
 	z: number,
 }
 
-export default function Lab2() {
+export default function Lab3() {
 	document.title = 'Lab3';
 	const [size, setSize] = useState<number>(window.innerHeight < window.innerWidth
 		? window.innerHeight
@@ -35,9 +35,6 @@ export default function Lab2() {
 					<input id='input4' className='input' placeholder='Введите d' />
 					<input id='input5' className='input' placeholder='Введите h' />
 				</div>
-				<button className='btn' onClick={() => {
-					setDrawEllipsoid(scale, rotate1, rotate2, rotate3);
-				}}>Аппроксимация</button>
 				<h3>Масштабирование</h3>
 				<input id='range1' type="range" min="1" max="10" step="0.1" value={scale}
 					onChange={(e) => {
@@ -86,24 +83,6 @@ function setDraw(scale: number, rotate1: number, rotate2: number, rotate3: numbe
 
 	if (a && b && c && d && h) {
 		draw(a, b, c, d, h, rotate1, rotate2, rotate3);
-	}
-}
-
-function setDrawEllipsoid(scale: number, rotate1: number, rotate2: number, rotate3: number) {
-	let a: number = +(document.getElementById('input1') as HTMLInputElement).value;
-	let b: number = +(document.getElementById('input2') as HTMLInputElement).value;
-	let c: number = +(document.getElementById('input3') as HTMLInputElement).value;
-	let d: number = +(document.getElementById('input4') as HTMLInputElement).value;
-	let h: number = +(document.getElementById('input5') as HTMLInputElement).value;
-
-	a *= scale;
-	b *= scale;
-	c *= scale;
-	d *= scale;
-	h *= scale;
-
-	if (a && b && c && d && h) {
-		drawEllipsoid(a, b, c, rotate1, rotate2, rotate3);
 	}
 }
 
@@ -192,215 +171,27 @@ function draw(a: number, b: number, c: number, d: number, h: number, rotate1: nu
 		ctx = canvas.getContext("2d");
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-		let v1: Vertex = {
-			x: -c,
-			y: -h,
-			z: d,
-		};
+		let step = canvas.width / (20 * Math.ceil(a / 10));
 
-		let v2: Vertex = {
-			x: c,
-			y: -h,
-			z: d,
-		};
+		let y: any = (x: number) => b / a * Math.sqrt(a ** 2 - x ** 2);
 
-		let v3: Vertex = {
-			x: a,
-			y: h,
-			z: b,
-		};
-
-		let v4: Vertex = {
-			x: -a,
-			y: h,
-			z: b,
-		};
-
-		let v5: Vertex = {
-			x: -c,
-			y: -h,
-			z: -d,
-		};
-
-		let v6: Vertex = {
-			x: c,
-			y: -h,
-			z: -d,
-		};
-
-		let v7: Vertex = {
-			x: a,
-			y: h,
-			z: -b,
-		};
-
-		let v8: Vertex = {
-			x: -a,
-			y: h,
-			z: -b,
-		};
-
-		let vertices: Vertex[] = [v1, v2, v3, v4, v5, v6, v7, v8];
-
-		vertices = rotateX(rotate1, vertices);
-		vertices = rotateY(rotate2, vertices);
-		vertices = rotateZ(rotate3, vertices);
-
-		const shiftW = canvas.width / 2;
-		const shiftH = canvas.height / 2;
-
-		//Верхняя грань
-		let flag1 = rightThree(vertices[1], vertices[0], vertices[4]);
-
-		if (flag1 > 0) {
-			ctx.beginPath();
-			ctx.moveTo(vertices[0].x + shiftW, vertices[0].y + shiftH);
-			ctx.lineTo(vertices[1].x + shiftW, vertices[1].y + shiftH);
-			ctx.lineTo(vertices[5].x + shiftW, vertices[5].y + shiftH);
-			ctx.lineTo(vertices[4].x + shiftW, vertices[4].y + shiftH);
-			ctx.closePath();
-			ctx.fillStyle = 'red';
-			ctx.lineWidth = 2;
-			ctx.fill();
+		let pts = [];
+		for (let x = -10000; x < 10000; x += 10) {
+			pts.push([canvas.width / 2 + x, canvas.height / 2 - y(x)]);
 		}
+		polyline('blue', pts);
 
-		//Нижняя грань
-		let flag2 = rightThree(vertices[6], vertices[7], vertices[3]);
-
-		if (flag2 > 0) {
-			ctx.beginPath();
-			ctx.moveTo(vertices[3].x + shiftW, vertices[3].y + shiftH);
-			ctx.lineTo(vertices[2].x + shiftW, vertices[2].y + shiftH);
-			ctx.lineTo(vertices[6].x + shiftW, vertices[6].y + shiftH);
-			ctx.lineTo(vertices[7].x + shiftW, vertices[7].y + shiftH);
-			ctx.closePath();
-			ctx.fillStyle = 'green';
-			ctx.lineWidth = 2;
-			ctx.fill();
+		pts = [];
+		for (let x = -10000; x < 10000; x += 10) {
+			pts.push([canvas.width / 2 + x, canvas.height / 2 + y(x)]);
 		}
-
-		//Задняя грань
-		let flag3 = rightThree(vertices[3], vertices[0], vertices[1]);
-
-		if (flag3 > 0) {
-			ctx.beginPath();
-			ctx.moveTo(vertices[0].x + shiftW, vertices[0].y + shiftH);
-			ctx.lineTo(vertices[1].x + shiftW, vertices[1].y + shiftH);
-			ctx.lineTo(vertices[2].x + shiftW, vertices[2].y + shiftH);
-			ctx.lineTo(vertices[3].x + shiftW, vertices[3].y + shiftH);
-			ctx.closePath();
-			ctx.fillStyle = 'blue';
-			ctx.lineWidth = 2;
-			ctx.fill();
-		}
-
-		//Передняя грань
-		let flag4 = rightThree(vertices[4], vertices[7], vertices[6]);
-
-		if (flag4 > 0) {
-			ctx.beginPath();
-			ctx.moveTo(vertices[4].x + shiftW, vertices[4].y + shiftH);
-			ctx.lineTo(vertices[5].x + shiftW, vertices[5].y + shiftH);
-			ctx.lineTo(vertices[6].x + shiftW, vertices[6].y + shiftH);
-			ctx.lineTo(vertices[7].x + shiftW, vertices[7].y + shiftH);
-			ctx.closePath();
-			ctx.fillStyle = 'pink';
-			ctx.lineWidth = 2;
-			ctx.fill();
-		}
-
-		//Правая грань
-		let flag5 = rightThree(vertices[1], vertices[5], vertices[6]);
-
-		if (flag5 > 0) {
-			ctx.beginPath();
-			ctx.moveTo(vertices[1].x + shiftW, vertices[1].y + shiftH);
-			ctx.lineTo(vertices[5].x + shiftW, vertices[5].y + shiftH);
-			ctx.lineTo(vertices[6].x + shiftW, vertices[6].y + shiftH);
-			ctx.lineTo(vertices[2].x + shiftW, vertices[2].y + shiftH);
-			ctx.closePath();
-			ctx.fillStyle = 'orange';
-			ctx.lineWidth = 2;
-			ctx.fill();
-		}
-
-		//Левая грань
-		let flag6 = rightThree(vertices[7], vertices[4], vertices[0]);
-
-		if (flag6 > 0) {
-			ctx.beginPath();
-			ctx.moveTo(vertices[0].x + shiftW, vertices[0].y + shiftH);
-			ctx.lineTo(vertices[4].x + shiftW, vertices[4].y + shiftH);
-			ctx.lineTo(vertices[7].x + shiftW, vertices[7].y + shiftH);
-			ctx.lineTo(vertices[3].x + shiftW, vertices[3].y + shiftH);
-			ctx.closePath();
-			ctx.fillStyle = 'brown';
-			ctx.lineWidth = 2;
-			ctx.fill();
-		}
+		polyline('blue', pts);
 	}
 }
 
-const radiusX = 1; // Радиус по оси X
-const radiusY = 1; // Радиус по оси Y
-const radiusZ = 1; // Радиус по оси Z
-const latitudeBands = 30; // Количество полос по широте
-const longitudeBands = 30; // Количество полос по долготе
-
-function createEllipsoidVertices() {
-	const vertices: number[] = [];
-
-	for (let latNumber = 0; latNumber <= latitudeBands; latNumber++) {
-		const theta = latNumber * Math.PI / latitudeBands;
-		const sinTheta = Math.sin(theta);
-		const cosTheta = Math.cos(theta);
-
-		for (let longNumber = 0; longNumber <= longitudeBands; longNumber++) {
-			const phi = longNumber * 2 * Math.PI / longitudeBands;
-			const sinPhi = Math.sin(phi);
-			const cosPhi = Math.cos(phi);
-
-			const x = cosPhi * sinTheta;
-			const y = cosTheta;
-			const z = sinPhi * sinTheta;
-
-			// Масштабирование по осям
-			vertices.push(radiusX * x);
-			vertices.push(radiusY * y);
-			vertices.push(radiusZ * z);
-		}
-	}
-
-	return vertices;
-}
-
-function createVertexBuffer(gl: WebGLRenderingContext, vertices: number[]) {
-	const vertexBuffer = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-	return vertexBuffer;
-}
-
-function initWebGL() {
-	const canvas: any = document.getElementById("labCanvas");
-
-	if (canvas?.getContext) {
-		ctx = canvas.getContext("2d");
-		ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-		const gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
-
-		if (!gl) {
-			console.log(gl);
-		} else {
-			const vertices = createEllipsoidVertices();
-			const vertexBuffer = createVertexBuffer(gl, vertices);
-		}
-	}
-
-	// ... далее код для настройки шейдеров и отрисовки
-}
-
-function drawEllipsoid(a: number, b: number, c: number, rotate1: number, rotate2: number, rotate3: number): any {
-	initWebGL();
+function polyline(color: any, pts: any): any {
+	ctx.strokeStyle = color;
+	ctx.beginPath();
+	pts.forEach((p: any, i: any) => i ? ctx.lineTo(...p) : ctx.moveTo(...p));
+	ctx.stroke();
 }
