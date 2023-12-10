@@ -5,7 +5,7 @@ interface Vertex {
 	x: number,
 	y: number,
 	z: number,
-}
+};
 
 export default function Lab2() {
 	document.title = 'Lab2';

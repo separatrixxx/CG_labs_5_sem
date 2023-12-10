@@ -10,6 +10,7 @@ export default function Main() {
 			<LabBlock h1='Lab 2' h2='variant: обелиск' link='lab2' />
 			<LabBlock h1='Lab 3' h2='variant: эллипсоид' link='lab3' />
 			<LabBlock h1='Lab 4' h2='variant: эллипсоид' link='lab4' />
+			<LabBlock h1='Lab 7' h2='variant: кривая Безье 2-й степени' link='lab7' />
 		</div>
 	);
 }
