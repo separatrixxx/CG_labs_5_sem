@@ -171,27 +171,151 @@ function draw(a: number, b: number, c: number, d: number, h: number, rotate1: nu
 		ctx = canvas.getContext("2d");
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-		let step = canvas.width / (20 * Math.ceil(a / 10));
+		let v1: Vertex = {
+			x: -c,
+			y: -h,
+			z: d,
+		};
 
-		let y: any = (x: number) => b / a * Math.sqrt(a ** 2 - x ** 2);
+		let v2: Vertex = {
+			x: c,
+			y: -h,
+			z: d,
+		};
 
-		let pts = [];
-		for (let x = -10000; x < 10000; x += 10) {
-			pts.push([canvas.width / 2 + x, canvas.height / 2 - y(x)]);
+		let v3: Vertex = {
+			x: a,
+			y: h,
+			z: b,
+		};
+
+		let v4: Vertex = {
+			x: -a,
+			y: h,
+			z: b,
+		};
+
+		let v5: Vertex = {
+			x: -c,
+			y: -h,
+			z: -d,
+		};
+
+		let v6: Vertex = {
+			x: c,
+			y: -h,
+			z: -d,
+		};
+
+		let v7: Vertex = {
+			x: a,
+			y: h,
+			z: -b,
+		};
+
+		let v8: Vertex = {
+			x: -a,
+			y: h,
+			z: -b,
+		};
+
+		let vertices: Vertex[] = [v1, v2, v3, v4, v5, v6, v7, v8];
+
+		vertices = rotateX(rotate1, vertices);
+		vertices = rotateY(rotate2, vertices);
+		vertices = rotateZ(rotate3, vertices);
+
+		const shiftW = canvas.width / 2;
+		const shiftH = canvas.height / 2;
+
+		//Верхняя грань
+		let flag1 = rightThree(vertices[1], vertices[0], vertices[4]);
+
+		if (flag1 > 0) {
+			ctx.beginPath();
+			ctx.moveTo(vertices[0].x + shiftW, vertices[0].y + shiftH);
+			ctx.lineTo(vertices[1].x + shiftW, vertices[1].y + shiftH);
+			ctx.lineTo(vertices[5].x + shiftW, vertices[5].y + shiftH);
+			ctx.lineTo(vertices[4].x + shiftW, vertices[4].y + shiftH);
+			ctx.closePath();
+			ctx.fillStyle = 'red';
+			ctx.lineWidth = 2;
+			ctx.fill();
 		}
-		polyline('blue', pts);
 
-		pts = [];
-		for (let x = -10000; x < 10000; x += 10) {
-			pts.push([canvas.width / 2 + x, canvas.height / 2 + y(x)]);
+		//Нижняя грань
+		let flag2 = rightThree(vertices[6], vertices[7], vertices[3]);
+
+		if (flag2 > 0) {
+			ctx.beginPath();
+			ctx.moveTo(vertices[3].x + shiftW, vertices[3].y + shiftH);
+			ctx.lineTo(vertices[2].x + shiftW, vertices[2].y + shiftH);
+			ctx.lineTo(vertices[6].x + shiftW, vertices[6].y + shiftH);
+			ctx.lineTo(vertices[7].x + shiftW, vertices[7].y + shiftH);
+			ctx.closePath();
+			ctx.fillStyle = 'green';
+			ctx.lineWidth = 2;
+			ctx.fill();
 		}
-		polyline('blue', pts);
+
+		//Задняя грань
+		let flag3 = rightThree(vertices[3], vertices[0], vertices[1]);
+
+		if (flag3 > 0) {
+			ctx.beginPath();
+			ctx.moveTo(vertices[0].x + shiftW, vertices[0].y + shiftH);
+			ctx.lineTo(vertices[1].x + shiftW, vertices[1].y + shiftH);
+			ctx.lineTo(vertices[2].x + shiftW, vertices[2].y + shiftH);
+			ctx.lineTo(vertices[3].x + shiftW, vertices[3].y + shiftH);
+			ctx.closePath();
+			ctx.fillStyle = 'blue';
+			ctx.lineWidth = 2;
+			ctx.fill();
+		}
+
+		//Передняя грань
+		let flag4 = rightThree(vertices[4], vertices[7], vertices[6]);
+
+		if (flag4 > 0) {
+			ctx.beginPath();
+			ctx.moveTo(vertices[4].x + shiftW, vertices[4].y + shiftH);
+			ctx.lineTo(vertices[5].x + shiftW, vertices[5].y + shiftH);
+			ctx.lineTo(vertices[6].x + shiftW, vertices[6].y + shiftH);
+			ctx.lineTo(vertices[7].x + shiftW, vertices[7].y + shiftH);
+			ctx.closePath();
+			ctx.fillStyle = 'pink';
+			ctx.lineWidth = 2;
+			ctx.fill();
+		}
+
+		//Правая грань
+		let flag5 = rightThree(vertices[1], vertices[5], vertices[6]);
+
+		if (flag5 > 0) {
+			ctx.beginPath();
+			ctx.moveTo(vertices[1].x + shiftW, vertices[1].y + shiftH);
+			ctx.lineTo(vertices[5].x + shiftW, vertices[5].y + shiftH);
+			ctx.lineTo(vertices[6].x + shiftW, vertices[6].y + shiftH);
+			ctx.lineTo(vertices[2].x + shiftW, vertices[2].y + shiftH);
+			ctx.closePath();
+			ctx.fillStyle = 'orange';
+			ctx.lineWidth = 2;
+			ctx.fill();
+		}
+
+		//Левая грань
+		let flag6 = rightThree(vertices[7], vertices[4], vertices[0]);
+
+		if (flag6 > 0) {
+			ctx.beginPath();
+			ctx.moveTo(vertices[0].x + shiftW, vertices[0].y + shiftH);
+			ctx.lineTo(vertices[4].x + shiftW, vertices[4].y + shiftH);
+			ctx.lineTo(vertices[7].x + shiftW, vertices[7].y + shiftH);
+			ctx.lineTo(vertices[3].x + shiftW, vertices[3].y + shiftH);
+			ctx.closePath();
+			ctx.fillStyle = 'brown';
+			ctx.lineWidth = 2;
+			ctx.fill();
+		}
 	}
-}
-
-function polyline(color: any, pts: any): any {
-	ctx.strokeStyle = color;
-	ctx.beginPath();
-	pts.forEach((p: any, i: any) => i ? ctx.lineTo(...p) : ctx.moveTo(...p));
-	ctx.stroke();
 }
